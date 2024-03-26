@@ -73,7 +73,7 @@ function Header() {
       {session ? (
         <div
           onClick={() => signOut()}
-          className="hidden cursor-pointer items-center space-x-2 border border-black p-2 lg:flex"
+          className=" cursor-pointer items-center space-x-2 border border-black p-2 lg:flex"
         >
           <div className="relative h-5 w-5 flex-shrink-0">
             <UsersIcon className="text-black h-6 w-5 lg:w-9 lg:h-8 cursor-pointer rounded-sm lg:p-1 lg:hover:text-3xl" />
@@ -89,7 +89,7 @@ function Header() {
       ) : (
         <div
           onClick={() => signIn()}
-          className="hidden cursor-pointer items-center space-x-2 border border-black p-2 lg:flex"
+          className=" cursor-pointer items-center space-x-2 border border-black p-2 lg:flex"
         >
           <div className="relative h-5 w-5 flex-shrink-0">
             <UsersIcon className="text-black h-6 w-5 lg:w-9 lg:h-8 cursor-pointer rounded-sm lg:p-1 " />
