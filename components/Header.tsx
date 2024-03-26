@@ -51,7 +51,7 @@ function Header() {
         <input
           type="text"
           placeholder="Search Posts"
-          className="flex-1 bg-transparent outline-none"
+          className="flex-1 bg-transparent outline-none text-black"
         />
         <button type="submit" />
       </form>
