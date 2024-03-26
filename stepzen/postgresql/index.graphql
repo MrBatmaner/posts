@@ -1,0 +1,337 @@
+type Comment {
+  created_at: DateTime
+  id: ID!
+  post_id: ID
+  text: String
+  username: String
+}
+
+type Post {
+  body: String
+  created_at: DateTime
+  id: ID!
+  image: String
+  subnewsposts_id: ID
+  title: String
+  username: String
+  votes: [Vote]
+    @materializer(
+      query: "getVotesByPostId"
+      arguments: [{ name: "post_id", field: "id" }]
+    )
+  comments: [Comment]
+    @materializer(
+      query: "getCommentByPostId"
+      arguments: [{ name: "post_id", field: "id" }]
+    )
+  subnewsposts: [Subnewsposts]
+    @materializer(
+      query: "getSubnewspostsListById"
+      arguments: [{ name: "id", field: "subnewsposts_id" }]
+    )
+}
+
+type Subnewsposts {
+  created_at: DateTime
+  id: ID!
+  topic: String
+}
+
+type Vote {
+  created_at: DateTime
+  id: ID!
+  post_id: ID
+  upvote: Boolean
+  username: String
+}
+
+"""
+The following queries are just a set of examples of how to access your schema.
+Feel free to modify them or aggregate more.
+"""
+type Query {
+  " Queries for type 'Comment' "
+  commentList: [Comment]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "comment"
+      configuration: "postgresql_config"
+    )
+
+  getCommentByPostId(post_id: ID!): [Comment]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT * FROM "comment" WHERE "post_id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+
+  getVotesByPostId(post_id: ID!): [Vote]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT * FROM "vote" WHERE "post_id" = $1
+      order by "created_at" desc
+      """
+      configuration: "postgresql_config"
+    )
+
+  " Queries for type 'Post' "
+  postById(id: ID!): [Post]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "post"
+      configuration: "postgresql_config"
+    )
+  """
+  if add table all will die
+  """
+  getpostListByTopic(topic: String!): [Post]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select *, "post".id as id from "post"
+      join "subnewsposts" on "subnewsposts"."id" = "post"."subnewsposts_id"
+      where "subnewsposts"."topic" = $1
+      order by "post"."created_at" desc
+      """
+
+      configuration: "postgresql_config"
+    )
+
+  postByIdAndBody(id: ID!, body: String!): [Post]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "post"
+      configuration: "postgresql_config"
+    )
+  postList: [Post]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      select * from "post"
+      order by "post"."created_at" desc
+      """
+      configuration: "postgresql_config"
+    )
+
+  getPostList: [Post]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "post"
+      configuration: "postgresql_config"
+    )
+  postPaginatedList(first: Int, after: Int): [Post]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "body", "created_at", "id", "image", "subnewsposts_id", "title", "username" FROM "post" LIMIT $1 OFFSET $2
+      """
+      configuration: "postgresql_config"
+    )
+  " Queries for type 'Subnewsposts' "
+  subnewspostsList: [Subnewsposts]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "subnewsposts"
+      configuration: "postgresql_config"
+    )
+
+  """
+  How to query based on subreddit topic
+  """
+  getSubnewspostsListByTopic(topic: String!): [Subnewsposts]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      select * FROM "public.subnewsposts" WHERE "topic" = '$1'
+      """
+      table: "subnewsposts"
+      configuration: "postgresql_config"
+    )
+  """
+  if add table all will die
+  """
+  getpostlistByPostId(post_id: ID!): Post
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      select *, "post".id as id from "post"
+      where "post"."id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+
+  """
+  How to query based on subreddit id
+  """
+  getSubnewspostsListById(id: ID!): [Subnewsposts]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT * FROM "public.subnewsposts" WHERE "id" = $1
+      """
+      table: "subnewsposts"
+      configuration: "postgresql_config"
+    )
+
+  getSubnewspostsListLimit(limit: Int!): [Subnewsposts]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      select * from "subnewsposts"
+      order by "created_at" desc limit $1
+      """
+      configuration: "postgresql_config"
+    )
+
+  subnewspostsPaginatedList(first: Int, after: Int): [Subnewsposts]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "created_at", "id", "topic" FROM "subnewsposts" LIMIT $1 OFFSET $2
+      """
+      configuration: "postgresql_config"
+    )
+  " Queries for type 'Vote' "
+  voteList: [Vote]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "vote"
+      configuration: "postgresql_config"
+    )
+  votePaginatedList(first: Int, after: Int): [Vote]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "created_at", "id", "post_id", "upvote", "username" FROM "vote" LIMIT $1 OFFSET $2
+      """
+      configuration: "postgresql_config"
+    )
+}
+
+"""
+The following mutations are just a set of examples of how to access your schema.
+Feel free to modify them or aggregate more.
+"""
+type Mutation {
+  " Mutations for type 'Comment' "
+  deleteComment(
+    username: String!
+    post_id: ID!
+    text: String!
+    id: ID!
+    created_at: DateTime!
+  ): Comment
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "comment"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+
+  " Mutations for type 'Post' "
+  deletePost(
+    body: String!
+    id: ID!
+    subnewsposts_id: ID!
+    created_at: DateTime!
+    title: String!
+    username: String!
+    image: String!
+  ): Post
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "post"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  insertPost(
+    image: String!
+    body: String!
+    subnewsposts_id: ID!
+    title: String!
+    username: String!
+  ): Post
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "post"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+
+  " Mutations for type 'Subnewsposts' "
+  deleteSubnewsposts(
+    topic: String!
+    created_at: DateTime!
+    id: ID!
+  ): Subnewsposts
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "subnewsposts"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  insertSubnewsposts(topic: String!): Subnewsposts
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "subnewsposts"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  " Mutations for type 'Vote' "
+  deleteVote(
+    username: String!
+    post_id: ID!
+    id: ID!
+    created_at: DateTime!
+    upvote: Boolean!
+  ): Vote
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "vote"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+
+  insertComment(post_id: ID!, username: String!, text: String!): Comment
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "comment"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+
+  insertVote(post_id: ID!, username: String!, upvote: Boolean!): Vote
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "vote"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+}
