@@ -9,7 +9,7 @@ import { Toaster } from "react-hot-toast";
 export default function App({
   Component,
   pageProps: { session, ...pageProps },
-}: AppProps) {
+}: any) {
   return (
     <ApolloProvider client={client}>
       <SessionProvider session={session}>
