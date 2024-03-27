@@ -46,11 +46,11 @@ function Header() {
         <p className="ml-2 hidden flex-1 lg:inline text-black">Home</p>
         <ChevronDownIcon className="h-5 w-5 text-black" />
       </div>
-      <form className="flex flex-1 h-10 w-10 items-center space-x-2 rounded bg-white border border-gray-200">
+      <form className="flex flex-1 h-10 w-20 items-center space-x-2 rounded bg-white border border-gray-200 px-3 py-1">
         <MagnifyingGlassIcon className="h-6 w-6 text-gray-400" />
         <input
           type="text"
-          placeholder="Search Posts"
+          placeholder="Search"
           className="flex-1 bg-transparent outline-none text-black"
         />
         <button type="submit" />
