@@ -30,7 +30,7 @@ function Header() {
   const { data: session } = useSession();
   return (
     //Link prefetches page, and as a esult it loads faster
-    <div className="sticky top-0 z-50 flex bg-#d6ccc2 px-4 py-2 items-center shadow-sm">
+    <div className="sticky top-0 z-50 flex bg-blue-500 px-4 py-2 items-center shadow-sm">
       <div className="relative h-20 w-20 flex-shrink-0 cursor-pointer">
         <Link href="/">
           <Image
