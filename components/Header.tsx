@@ -30,12 +30,12 @@ function Header() {
   const { data: session } = useSession();
   return (
     //Link prefetches page, and as a esult it loads faster
-    <div className="sticky top-0 z-50 flex bg-orange-200 px-4 py-2 items-center shadow-sm">
+    <div className="sticky top-0 z-50 flex bg-#d6ccc2 px-4 py-2 items-center shadow-sm">
       <div className="relative h-20 w-20 flex-shrink-0 cursor-pointer">
         <Link href="/">
           <Image
             objectFit="contain"
-            src="https://joker-uploads.s3.ap-southeast-2.amazonaws.com/PDS-logo.png"
+            src="https://joker-uploads.s3.ap-southeast-2.amazonaws.com/pinguvin.png"
             layout="fill"
             alt="post"
           />
@@ -46,7 +46,7 @@ function Header() {
         <p className="ml-2 hidden flex-1 lg:inline text-black">Home</p>
         <ChevronDownIcon className="h-5 w-5 text-black" />
       </div>
-      <form className="flex flex-1 items-center space-x-2 rounded-sm border border-gray-200 bg-blue-50 px-3 py-1">
+      <form className="flex flex-1 h-10 w-10 items-center space-x-2 rounded bg-white border border-gray-200">
         <MagnifyingGlassIcon className="h-6 w-6 text-gray-400" />
         <input
           type="text"

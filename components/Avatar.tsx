@@ -17,7 +17,7 @@ function Avatar({ seed, large }: Props) {
       }`}
     >
       <Image
-        className="bg-orange-50"
+        className="bg-#d6ccc2"
         alt="avatar"
         layout="fill"
         src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${

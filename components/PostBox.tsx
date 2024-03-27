@@ -132,7 +132,7 @@ function PostBox({ subnewsposts }: Props) {
   return (
     <form
       onSubmit={onSubmit}
-      className="sticky top-20 z-50 rounded-md border bg-orange-50 border-orange-300"
+      className="sticky top-20 z-50 rounded-md border bg-white border-gray-300"
     >
       <div className="text-black flex items-center space-x-3">
         {/* Avatar */}
@@ -142,7 +142,7 @@ function PostBox({ subnewsposts }: Props) {
           //a way we connect import to the special form is
           {...register("postTitle", { required: true })}
           disabled={!session}
-          className="bg-orange-50 p-2 pl-5 outline-none flex-1 rounded-md"
+          className="bg-white p-2 pl-5 outline-none flex-1 rounded-md"
           type="text"
           placeholder={
             session
@@ -156,7 +156,7 @@ function PostBox({ subnewsposts }: Props) {
         <PhotoIcon
           onClick={() => setImageBoxOpen(!imageBoxOpen)}
           className={`h-6 cursor-pointer text-gray-300 ${
-            imageBoxOpen && "text-orange-300"
+            imageBoxOpen && "text-gray-300"
           }`}
         />
         <LinkIcon className="h-6 text-gray-300" />
